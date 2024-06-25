@@ -3,7 +3,7 @@ Removes all of the duplicate links from the idea_links.txt file.
 Then saves the new list to a new file called idea_links_no_duplicates.txt
 """
 import glob
-
+import datetime
 
 def remove_duplicates():
     # get all of the files in the current dir that start with idea_links
@@ -21,10 +21,10 @@ def remove_duplicates():
         idea_links = list(set(idea_links))
         all_ideas.extend(idea_links)
     idea_links = list(set(all_ideas))
-    with open('idea_links_no_duplicates.txt', 'w') as f:
+    now = datetime.datetime.now()
+    with open(f'idea_links_no_duplicates-{now}.txt', 'w') as f:
         for link in idea_links:
             f.write(link + '\n')
-
 
 if __name__ == '__main__':
     remove_duplicates()
