@@ -15,23 +15,28 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 import uuid
 from datetime import datetime
+import re
+
+db_user=''
+db_password=r""
+db_host=''
+db_name=''
 
 class SqlPipeline:
     collection_name = 'scrapy_items'
 
     def __init__(self, ):
-        self.engine = create_engine(f'postgresql+psycopg2://postgres:postgres@localhost/ideas', echo=True)
+        self.engine = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:5432/vic', echo=True)
         Base.Base.metadata.create_all(self.engine)
 
     def close_spider(self, spider):
         pass
 
     def process_item(self, item, spider):
-        # Make a idea, catalyst, company, description and user object
-        # Then add them to the database
         with Session(self.engine) as session:
             print('Processing item')
-            # check if the user already exists
+            
+            # Check if the user already exists
             user = session.query(User.User).filter(User.User.user_link == item['userLink']).first()
             if user is None:
                 user = User.User(
@@ -39,16 +44,17 @@ class SqlPipeline:
                     user_link=item['userLink']
                 )
 
-            # check if the company exists
+            # Check if the company exists
             company = session.query(Company.Company).filter(Company.Company.ticker == item['ticker']).first()
             if company is None:
                 company = Company.Company(
                     ticker=item['ticker'],
                     company_name=item['companyName']
                 )
-            est_index = item['date'].index('EST')
 
-            new_date = datetime.strptime(item['date'][0:est_index+3], "%B %d, %Y - %I:%M%p %Z")
+            # Remove everything after the time part
+            date_string = re.sub(r'\s*[-\s]*EST.*', '', item['date'])
+            new_date = datetime.strptime(date_string, "%B %d, %Y - %I:%M%p")
 
             idea = Idea.Idea(
                 id=str(uuid.uuid4()),
@@ -77,6 +83,5 @@ class SqlPipeline:
             session.add(description)
             session.add(catalysts)
             session.commit()
-
 
         return item

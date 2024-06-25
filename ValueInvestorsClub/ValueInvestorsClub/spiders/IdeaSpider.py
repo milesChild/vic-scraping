@@ -12,6 +12,7 @@ from ValueInvestorsClub.items import ValueinvestorsclubItem
 import subprocess
 
 def rotate_ip():
+    return
     command = "protonvpn-cli c -r"
     command = command.split()
     # run the above command and then print the output
@@ -37,7 +38,7 @@ class IdeaSpider(scrapy.Spider):
     def load_idea_links(self):
         # load the idea links from the file
         idea_links = []
-        with open('/home/douglas/InvestClub/idea_links_no_duplicates.txt', 'r') as f:
+        with open('/Users/MilesChild/Desktop/codeProjects/vic-scraping/idea_links_no_duplicates-2024-06-25 09:39:04.987526.txt', 'r') as f:
             for line in f:
                 idea_links.append(line.strip())
         return idea_links
@@ -46,13 +47,11 @@ class IdeaSpider(scrapy.Spider):
         idea_links = self.load_idea_links()
         # every 20 links rotate the ip.
         count = 0
-        for link in idea_links[13860:]:
+        for link in idea_links[13850:]:
             count += 1
             if count % 10 == 0:
                 rotate_ip()
             yield scrapy.Request(link, self.parse)
-
-        # yield scrapy.Request("https://www.valueinvestorsclub.com/idea/InPost/5698302853", self.parse)
 
     def parse(self, response):
         # get the link with authors username and the link to the authors page

@@ -4,3 +4,4 @@ ValueInvestorsClub/ValueInvestorsClub/spiders/__pycache__/
 __pycache__
 ValueInvestorsClub/__pycache__
 credentials.py
+db_creds.py
