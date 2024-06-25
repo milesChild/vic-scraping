@@ -6,9 +6,8 @@ from time import sleep
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.chrome.options import Options
-# import random
+from fake_useragent import UserAgent
 import random
-
 import subprocess
 
 def rotate_ip():
@@ -43,18 +42,18 @@ def load_more_ideas(driver):
 
 def main():
 
-    date_val = '02/27/2023'
+    date_val = '06/25/2024'
 
     # Create a new instance of the Chrome driver
-    # chrome_options = Options()
-    #chrome_options.add_argument("--disable-extensions")
-    #chrome_options.add_argument("--disable-gpu")
+    chrome_options = Options()
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--disable-gpu")
     #chrome_options.add_argument("--no-sandbox") # linux only
-    # chrome_options.add_argument("--headless")
-    # options = Options()
-    # options.add_argument(f'user-agent={UserAgent().random}')
+    chrome_options.add_argument("--headless")
+    options = Options()
+    options.add_argument(f'user-agent={UserAgent().random}')
     driver = webdriver.Chrome(
-        # options=options
+        options=options
     )
 
     # go to the investorsclub ideas page
@@ -78,6 +77,13 @@ def main():
     goto_date_button.click()
     sleep(.25)
 
+    """ TEMP """
+    load_more_ideas(driver)
+    sleep(5)
+    idea_links = get_idea_links(driver)
+    print(idea_links)
+    return
+
     # get all the idea links
     idea_links = []
     count = 0
@@ -85,26 +91,30 @@ def main():
     last_rotated = 0
     max_count = 200
     while count < max_count:
-        load_more_ideas(driver)
-        # choose a random number of seconds from 1 to 10 to sleep
-        sleep_val = random.randint(1, sleep_max)
-        sleep(sleep_val)
-        if count % 10 == 0:
-            try:
-                idea_links = get_idea_links(driver)
-            except Exception as e:
-                print("Error getting idea links: " + str(e))
+        try:
+            load_more_ideas(driver)
+            # choose a random number of seconds from 1 to 10 to sleep
+            sleep_val = random.randint(1, sleep_max)
+            sleep(sleep_val)
+            if count % 10 == 0:
+                try:
+                    idea_links = get_idea_links(driver)
+                except Exception as e:
+                    print("Error getting idea links: " + str(e))
+                    rotate_ip()
+                    last_rotated = count
+            if count - last_rotated % 60 == 0:
                 rotate_ip()
                 last_rotated = count
-        if count - last_rotated % 60 == 0:
-            rotate_ip()
-            last_rotated = count
-        if count % 20 == 0:
-            date_val = date_val.replace('/', '-')
-            save_links(idea_links, f'idea_links-{date_val}.txt')
-            print("Count is at: " + str(count) + " of " + str(max_count))
-            print(count)
-        count += 1
+            if count % 20 == 0:
+                date_val = date_val.replace('/', '-')
+                save_links(idea_links, f'idea_links-{date_val}.txt')
+                print("Count is at: " + str(count) + " of " + str(max_count))
+                print(count)
+            count += 1
+        except Exception as e:
+            print("Error: " + str(e))
+            break
     idea_links = get_idea_links(driver)
     print(len(idea_links))
     print(idea_links[-1])
