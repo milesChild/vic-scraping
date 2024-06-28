@@ -5,3 +5,4 @@ __pycache__
 ValueInvestorsClub/__pycache__
 credentials.py
 db_creds.py
+data/

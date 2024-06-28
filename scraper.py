@@ -11,6 +11,7 @@ import random
 import subprocess
 
 def rotate_ip():
+    return
     command = "protonvpn-cli c -r"
     command = command.split()
     # run the above command and then print the output
@@ -42,7 +43,7 @@ def load_more_ideas(driver):
 
 def main():
 
-    date_val = '06/25/2024'
+    date_val = '10/23/2023'
 
     # Create a new instance of the Chrome driver
     chrome_options = Options()
@@ -77,12 +78,12 @@ def main():
     goto_date_button.click()
     sleep(.25)
 
-    """ TEMP """
-    load_more_ideas(driver)
-    sleep(5)
-    idea_links = get_idea_links(driver)
-    print(idea_links)
-    return
+    # """ TEMP """
+    # load_more_ideas(driver)
+    # sleep(5)
+    # idea_links = get_idea_links(driver)
+    # print(idea_links)
+    # return
 
     # get all the idea links
     idea_links = []
@@ -108,7 +109,7 @@ def main():
                 last_rotated = count
             if count % 20 == 0:
                 date_val = date_val.replace('/', '-')
-                save_links(idea_links, f'idea_links-{date_val}.txt')
+                save_links(idea_links, f'idea_links-{date_val}-2.txt')
                 print("Count is at: " + str(count) + " of " + str(max_count))
                 print(count)
             count += 1

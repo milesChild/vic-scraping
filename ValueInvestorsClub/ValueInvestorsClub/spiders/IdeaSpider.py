@@ -6,7 +6,6 @@ To view those we make a query that selects duplicate ideas where the user, ticke
 select * from ideas full outer join companies full outer join where date in (select date from ideas group by id having count(*) > 1);
 """
 
-
 import scrapy
 from ValueInvestorsClub.items import ValueinvestorsclubItem
 import subprocess
@@ -47,10 +46,12 @@ class IdeaSpider(scrapy.Spider):
         idea_links = self.load_idea_links()
         # every 20 links rotate the ip.
         count = 0
-        for link in idea_links[13850:]:
+        LAST_POSN = 15266
+        for link in idea_links[LAST_POSN:]:
             count += 1
             if count % 10 == 0:
                 rotate_ip()
+            print(f'Count: {count} Implied Position in File: {count + LAST_POSN}')
             yield scrapy.Request(link, self.parse)
 
     def parse(self, response):
