@@ -43,7 +43,7 @@ def load_more_ideas(driver):
 
 def main():
 
-    date_val = '10/23/2023'
+    date_val = '7/1/2024'
 
     # Create a new instance of the Chrome driver
     chrome_options = Options()
@@ -109,7 +109,7 @@ def main():
                 last_rotated = count
             if count % 20 == 0:
                 date_val = date_val.replace('/', '-')
-                save_links(idea_links, f'idea_links-{date_val}-2.txt')
+                save_links(idea_links, f'idea_links-{date_val}.txt')
                 print("Count is at: " + str(count) + " of " + str(max_count))
                 print(count)
             count += 1

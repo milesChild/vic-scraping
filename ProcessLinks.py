@@ -8,6 +8,7 @@ import datetime
 def remove_duplicates():
     # get all of the files in the current dir that start with idea_links
     files = glob.glob('idea_links*.txt')
+    files = ['idea_links-7-1-2024.txt']
     all_ideas = []
     for filename in files:
         if filename == 'idea_links_no_duplicates.txt':
@@ -21,7 +22,7 @@ def remove_duplicates():
         idea_links = list(set(idea_links))
         all_ideas.extend(idea_links)
     idea_links = list(set(all_ideas))
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     with open(f'idea_links_no_duplicates-{now}.txt', 'w') as f:
         for link in idea_links:
             f.write(link + '\n')

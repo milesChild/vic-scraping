@@ -37,7 +37,7 @@ class IdeaSpider(scrapy.Spider):
     def load_idea_links(self):
         # load the idea links from the file
         idea_links = []
-        with open('/Users/MilesChild/Desktop/codeProjects/vic-scraping/idea_links_no_duplicates-2024-06-25 09:39:04.987526.txt', 'r') as f:
+        with open('/Users/MilesChild/Desktop/codeProjects/vic-scraping/idea_links_no_duplicates-2024-07-04.txt', 'r') as f:
             for line in f:
                 idea_links.append(line.strip())
         return idea_links
@@ -46,7 +46,7 @@ class IdeaSpider(scrapy.Spider):
         idea_links = self.load_idea_links()
         # every 20 links rotate the ip.
         count = 0
-        LAST_POSN = 15266
+        LAST_POSN = 429
         for link in idea_links[LAST_POSN:]:
             count += 1
             if count % 10 == 0:
